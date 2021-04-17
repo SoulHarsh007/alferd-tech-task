@@ -1,26 +1,24 @@
 import Container from 'react-bootstrap/Container';
-import createPersistedState from 'use-persisted-state';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import {useState} from 'react';
 import jwt from 'jsonwebtoken';
-import {dbConnect} from '../../utils/mongodb.js';
+import {dbConnect} from '../utils/mongodb.js';
 import cookie from 'js-cookie';
 
 /**
- * @function index
+ * @function quiz
  * @author SoulHarsh007 <harshtheking@hotmail.com>
  * @copyright SoulHarsh007 2021
  * @since v1.0.0-Beta
- * @description Index page
+ * @description Quiz page
  * @param {{data: any[]}} param1 - props passed to the page
  * @returns {Container<any>} - React Body
  */
-export default function index({data}) {
+export default function quiz({data}) {
   const token = cookie.get('token');
-  const useQuestionState = createPersistedState('questions');
-  const [questions, setQuestions] = useQuestionState([]);
+  const [questions, setQuestions] = useState(data);
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const updateDb = () => {

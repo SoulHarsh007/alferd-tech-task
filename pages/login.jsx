@@ -1,21 +1,22 @@
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Alert from 'react-bootstrap/Alert';
 import cookie from 'js-cookie';
 import Router from 'next/router';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import jwt from 'jsonwebtoken';
 
 /**
- * @function index
+ * @function login
  * @author SoulHarsh007 <harshtheking@hotmail.com>
  * @copyright SoulHarsh007 2021
  * @since v1.0.0-Beta
  * @description Login Page
  * @returns {Container<any>} - React Body
  */
-export default function index() {
+export default function login() {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState('');
@@ -78,15 +79,14 @@ export default function index() {
             required
           />
         </Form.Group>
-        <Button variant="primary" type="submit">
-          Login
-        </Button>
-        <Button
-          variant="primary"
-          onClick={() => useEffect(() => Router.push('/signup'))}
-        >
-          Signup
-        </Button>
+        <ButtonToolbar className="justify-content-between">
+          <Button variant="primary" type="submit">
+            Login
+          </Button>
+          <Button variant="primary" onClick={() => Router.push('/signup')}>
+            Signup
+          </Button>
+        </ButtonToolbar>
       </Form>
     </Container>
   );
@@ -121,10 +121,10 @@ export async function getServerSideProps(context) {
         },
       };
     }
-    return {
-      props: {
-        questions: [],
-      },
-    };
   }
+  return {
+    props: {
+      questions: [],
+    },
+  };
 }

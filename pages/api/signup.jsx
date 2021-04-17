@@ -20,7 +20,7 @@ export default async function signUpHandler(req, res) {
       return res.status(400).json({error: 'Missing Fields'});
     }
     const mongo = await dbConnect();
-    const user = mongo
+    let user = await mongo
       .db(process.env.USER_DB)
       .collection(process.env.USER_COL)
       .findOne({
@@ -39,6 +39,12 @@ export default async function signUpHandler(req, res) {
         uuid: v4(),
         questions: [],
       });
+      user = await mongo
+      .db(process.env.USER_DB)
+      .collection(process.env.USER_COL)
+      .findOne({
+        email: req.body.email,
+      });
     const token = jwt.sign(
       {
         userId: user.uuid,
@@ -49,7 +55,9 @@ export default async function signUpHandler(req, res) {
         expiresIn: 3600,
       }
     );
-    return res.status(200).json({token});
+    return res.status(200).json({
+      token,
+    });
   }
   res.status(403).send();
 }

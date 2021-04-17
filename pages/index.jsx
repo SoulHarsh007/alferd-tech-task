@@ -1,10 +1,10 @@
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
-import createPersistedState from 'use-persisted-state';
 import Button from 'react-bootstrap/Button';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Alert from 'react-bootstrap/Alert';
+import Router from 'next/router';
 import {useState} from 'react';
 import {dbConnect} from '../utils/mongodb.js';
 import jwt from 'jsonwebtoken';
@@ -21,12 +21,8 @@ import cookie from 'js-cookie';
  */
 export default function index({data}) {
   const token = cookie.get('token');
-  const useQuestionState = createPersistedState('questions');
-  const [questions, setQuestions] = useQuestionState([]);
-  const [view, setView] = useState([]);
+  const [questions, setQuestions] = useState(data);
   const [show, setShow] = useState(false);
-  setQuestions(data);
-  setView(data);
   return (
     <Container fluid="xl">
       {show ? (
@@ -44,7 +40,6 @@ export default function index({data}) {
               confidence: 1,
             });
             setQuestions(data);
-            setView(x);
             setShow(true);
             return x;
           });
@@ -57,9 +52,8 @@ export default function index({data}) {
               questions,
               token,
             }),
-          })
-            .then(x => x.json())
-            .then(x => x);
+          }).then(x => x.json());
+          Router.push('/');
         }}
         className="text-center"
       >
@@ -85,8 +79,8 @@ export default function index({data}) {
           <Button variant="primary" type="submit">
             Submit
           </Button>
-          <Button variant="primary" onClick={() => setView(questions)}>
-            Load Questions List
+          <Button variant="primary" onClick={() => Router.push('/quiz')}>
+            Quiz
           </Button>
         </ButtonToolbar>
       </Form>
@@ -102,7 +96,7 @@ export default function index({data}) {
           </tr>
         </thead>
         <tbody>
-          {view.map((x, i) => (
+          {questions.map((x, i) => (
             <tr key={i}>
               <td>{i + 1}</td>
               <td>{x.question}</td>
@@ -175,11 +169,11 @@ export async function getServerSideProps(context) {
         },
       };
     }
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
   }
+  return {
+    redirect: {
+      destination: '/login',
+      permanent: false,
+    },
+  };
 }

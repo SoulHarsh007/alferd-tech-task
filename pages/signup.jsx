@@ -1,20 +1,21 @@
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Alert from 'react-bootstrap/Alert';
 import cookie from 'js-cookie';
 import Router from 'next/router';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 
 /**
- * @function index
+ * @function signup
  * @author SoulHarsh007 <harshtheking@hotmail.com>
  * @copyright SoulHarsh007 2021
  * @since v1.0.0-Beta
- * @description Login Page
+ * @description Signup Page
  * @returns {Container<any>} - React Body
  */
-export default function index() {
+export default function signup() {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState('');
@@ -80,15 +81,14 @@ export default function index() {
             required
           />
         </Form.Group>
-        <Button variant="primary" type="submit">
-          Signup
-        </Button>
-        <Button
-          variant="primary"
-          onClick={() => useEffect(() => Router.push('/login'))}
-        >
-          Login
-        </Button>
+        <ButtonToolbar className="justify-content-between">
+          <Button variant="primary" type="submit">
+            Signup
+          </Button>
+          <Button variant="primary" onClick={() => Router.push('/login')}>
+            Login
+          </Button>
+        </ButtonToolbar>
       </Form>
     </Container>
   );
