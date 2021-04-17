@@ -30,9 +30,25 @@ Bootstrap uses jQuery and React-Bootstrap allows us to use bootstrap without jQu
 
 Bootstrap is used for designing clean UI of the webpages.
 
-### Use-Persisted-State
+### Bcrypt
 
-Use-Persisted-State is used for accessing local storage with react
+Bcrypt is used hashing and verifying passwords.
+
+### JS-Cookie
+
+JS-Cookie is used to set a cookie on client-side.
+
+### JsonWebToken
+
+JsonWebToken is used to generate and verify json web tokens (JWT(s)) which are used to store/identify user sessions.
+
+### Mongodb
+
+Mongodb is used for storing users and their progress.
+
+### UUID
+
+UUID is used to assign user with a unique id.
 
 ## Usage
 
@@ -116,13 +132,63 @@ Run:
 pnpm start
 ```
 
+### Env Setup
+
+Edit `.env.local` according to your needs and rename it to `.env`
+
 ### Accessing
 
 Open a browser and visit: <http://localhost:3000> Add your question and answers
 to start the quiz head to <http://localhost:3000/quiz>
 
-## TODO
+## Route Information
 
-### User Setup
+### /
 
-This allows users to sign-up and secure their progress online
+**The index page**
+**Auto redirects to /login if user is not logged in**
+
+### /quiz
+
+**The quiz page**
+**Auto redirects to /login if user is not logged in**
+
+### /login
+
+**The login page**
+**Redirects to / after successful login**
+**Auto redirects to / if user is logged in**
+
+### /signup
+
+**The signup page**
+**Redirects to / after successful account creation**
+
+### /api/login
+
+**Allowed Methods: POST**
+Returns StatusCode 403 on incorrect method used
+
+**Body Parameters - POST:**  
+email: string - user's email address  
+password: string - user's password
+
+### /api/me
+
+**Allowed Methods: GET, POST**
+Returns StatusCode 403 on incorrect method used
+
+**Query Parameters - GET:**  
+token: string - client-side JWT Cookie
+
+**Body Parameters - POST:**
+token: string - client-side JWT Cookie  
+questions: array - array of questions with their answers and score
+
+### /api/signup
+
+**Allowed Methods: POST:**
+
+**Body Parameters - POST:**  
+email: string - user's email address  
+password: string - user's password

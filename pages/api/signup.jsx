@@ -39,7 +39,7 @@ export default async function signUpHandler(req, res) {
         uuid: v4(),
         questions: [],
       });
-      user = await mongo
+    user = await mongo
       .db(process.env.USER_DB)
       .collection(process.env.USER_COL)
       .findOne({
