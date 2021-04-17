@@ -6,21 +6,27 @@ import Button from 'react-bootstrap/Button';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Alert from 'react-bootstrap/Alert';
 import {useState} from 'react';
+import {dbConnect} from '../utils/mongodb.js';
+import jwt from 'jsonwebtoken';
+import cookie from 'js-cookie';
 
 /**
- * @async
  * @function index
  * @author SoulHarsh007 <harshtheking@hotmail.com>
  * @copyright SoulHarsh007 2021
  * @since v1.0.0-Beta
  * @description Index page
+ * @param {{data: any[]}} param1 - props passed to the page
  * @returns {Container<any>} - React Body
  */
-export default function index() {
+export default function index({data}) {
+  const token = cookie.get('token');
   const useQuestionState = createPersistedState('questions');
   const [questions, setQuestions] = useQuestionState([]);
   const [view, setView] = useState([]);
   const [show, setShow] = useState(false);
+  setQuestions(data);
+  setView(data);
   return (
     <Container fluid="xl">
       {show ? (
@@ -37,9 +43,23 @@ export default function index() {
               answer: e.currentTarget.answer.value,
               confidence: 1,
             });
+            setQuestions(data);
             setView(x);
+            setShow(true);
             return x;
           });
+          fetch('/api/me', {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+              questions,
+              token,
+            }),
+          })
+            .then(x => x.json())
+            .then(x => x);
         }}
         className="text-center"
       >
@@ -50,6 +70,7 @@ export default function index() {
             rows={1}
             placeholder="This will be your question"
             name="question"
+            required
           />
           <br />
           <Form.Control
@@ -57,10 +78,11 @@ export default function index() {
             rows={1}
             placeholder="This will be your answer"
             name="answer"
+            required
           />
         </Form.Group>
         <ButtonToolbar className="justify-content-between">
-          <Button variant="primary" type="submit" onClick={() => setShow(true)}>
+          <Button variant="primary" type="submit">
             Submit
           </Button>
           <Button variant="primary" onClick={() => setView(questions)}>
@@ -116,4 +138,48 @@ export default function index() {
       </Table>
     </Container>
   );
+}
+
+/**
+ * @async
+ * @function getServerSideProps
+ * @author SoulHarsh007 <harshtheking@hotmail.com>
+ * @copyright SoulHarsh007 2021
+ * @since v1.0.0-Beta
+ * @description Server Side Props Handler
+ * @param {import('next').GetServerSidePropsContext} context - Incoming request context
+ * @returns {import('next').GetServerSidePropsResult} - Server props
+ */
+export async function getServerSideProps(context) {
+  if ('token' in context.req.cookies) {
+    let decoded;
+    const token = context.req.cookies.token;
+    if (token) {
+      try {
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    if (decoded) {
+      const mongo = await dbConnect();
+      const user = await mongo
+        .db(process.env.USER_DB)
+        .collection(process.env.USER_COL)
+        .findOne({
+          email: decoded.email,
+        });
+      return {
+        props: {
+          data: user.questions,
+        },
+      };
+    }
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
 }
