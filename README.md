@@ -1,5 +1,12 @@
 # alferd-tech-task
 
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/1a84cf2e25ae4c6e88f3a8efb71998b0)](https://www.codacy.com/gh/SoulHarsh007/alferd-tech-task/dashboard?utm_source=github.com&utm_medium=referral&utm_content=SoulHarsh007/alferd-tech-task&utm_campaign=Badge_Grade)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/SoulHarsh007/alferd-tech-task.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/SoulHarsh007/alferd-tech-task/context:javascript)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/SoulHarsh007/alferd-tech-task.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/SoulHarsh007/alferd-tech-task/alerts/)
+[![deepcode](https://www.deepcode.ai/api/gh/badge?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF0Zm9ybTEiOiJnaCIsIm93bmVyMSI6IlNvdWxIYXJzaDAwNyIsInJlcG8xIjoiYWxmZXJkLXRlY2gtdGFzayIsImluY2x1ZGVMaW50IjpmYWxzZSwiYXV0aG9ySWQiOjI4MzI0LCJpYXQiOjE2MTg2NjUzNzl9.aCdk6KmE2nXyG-ci9ClUr9ZLwxhK-lpYdaqqUgJcI-8)](https://www.deepcode.ai/app/gh/SoulHarsh007/alferd-tech-task/_/dashboard?utm_content=gh%2FSoulHarsh007%2Falferd-tech-task)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
 ## Tools Used
 
 ### Next.js
