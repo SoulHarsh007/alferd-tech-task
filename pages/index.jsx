@@ -104,24 +104,44 @@ export default function index({data}) {
               <td>{x.confidence}</td>
               <td>
                 <Button
-                  onClick={() =>
+                  onClick={() => {
                     setQuestions(a => {
                       a[i].confidence = 1;
                       return a;
-                    })
-                  }
+                    });
+                    fetch('/api/me', {
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      method: 'POST',
+                      body: JSON.stringify({
+                        questions,
+                        token,
+                      }),
+                    }).then(x => x.json());
+                  }}
                 >
                   Reset
                 </Button>
               </td>
               <td>
                 <Button
-                  onClick={() =>
+                  onClick={() => {
                     setQuestions(a => {
                       a.splice(i, 1);
                       return a;
-                    })
-                  }
+                    });
+                    fetch('/api/me', {
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      method: 'POST',
+                      body: JSON.stringify({
+                        questions,
+                        token,
+                      }),
+                    }).then(x => x.json());
+                  }}
                 >
                   Remove
                 </Button>

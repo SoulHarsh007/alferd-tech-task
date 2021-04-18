@@ -2,7 +2,8 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
-import {useState} from 'react';
+import Table from 'react-bootstrap/Table';
+import {Fragment, useState} from 'react';
 import jwt from 'jsonwebtoken';
 import {dbConnect} from '../utils/mongodb.js';
 import cookie from 'js-cookie';
@@ -31,10 +32,37 @@ export default function quiz({data}) {
         questions,
         token,
       }),
-    })
-      .then(x => x.json())
-      .then(x => x);
+    }).then(x => x.json());
   };
+  const tables = [];
+  for (let i = 1; i !== 6; i++) {
+    const qes = questions.filter(x => x.confidence === i);
+    tables.push(
+      <Fragment key={i}>
+        <blockquote className="blockquote mb-0">
+          Questions with Score: {i}
+        </blockquote>
+        <Table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Question</th>
+              <th>Answer</th>
+            </tr>
+          </thead>
+          <tbody>
+            {qes.map((x, a) => (
+              <tr key={a}>
+                <td>{a + 1}</td>
+                <td>{x.question}</td>
+                <td>{x.answer}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Fragment>
+    );
+  }
   return (
     <Container fluid="xl">
       <p className="text-center">
@@ -90,20 +118,24 @@ export default function quiz({data}) {
           Show Answer
         </Button>
         <ButtonGroup>
-          <Button disabled>Set Score: </Button>
+          <Button disabled>Were you able to recall it?</Button>
           <Button
             onClick={() =>
               setQuestions(x => {
                 if (question === 'All questions have a 5 / 5 score!') {
                   return x;
                 }
-                x.filter(y => y.question === question)[0].confidence = 1;
+                const currentScore = x.filter(y => y.question === question)[0]
+                  .confidence;
+                currentScore < 5
+                  ? (x.filter(y => y.question === question)[0].confidence += 1)
+                  : undefined;
                 updateDb();
                 return x;
               })
             }
           >
-            1
+            Yes
           </Button>
           <Button
             onClick={() =>
@@ -111,58 +143,21 @@ export default function quiz({data}) {
                 if (question === 'All questions have a 5 / 5 score!') {
                   return x;
                 }
-                x.filter(y => y.question === question)[0].confidence = 2;
+                const currentScore = x.filter(y => y.question === question)[0]
+                  .confidence;
+                currentScore > 1
+                  ? (x.filter(y => y.question === question)[0].confidence -= 1)
+                  : undefined;
                 updateDb();
                 return x;
               })
             }
           >
-            2
-          </Button>
-          <Button
-            onClick={() =>
-              setQuestions(x => {
-                if (question === 'All questions have a 5 / 5 score!') {
-                  return x;
-                }
-                x.filter(y => y.question === question)[0].confidence = 3;
-                updateDb();
-                return x;
-              })
-            }
-          >
-            3
-          </Button>
-          <Button
-            onClick={() =>
-              setQuestions(x => {
-                if (question === 'All questions have a 5 / 5 score!') {
-                  return x;
-                }
-                x.filter(y => y.question === question)[0].confidence = 4;
-                updateDb();
-                return x;
-              })
-            }
-          >
-            4
-          </Button>
-          <Button
-            onClick={() =>
-              setQuestions(x => {
-                if (question === 'All questions have a 5 / 5 score!') {
-                  return x;
-                }
-                x.filter(y => y.question === question)[0].confidence = 5;
-                updateDb();
-                return x;
-              })
-            }
-          >
-            5
+            No
           </Button>
         </ButtonGroup>
       </ButtonToolbar>
+      {tables}
     </Container>
   );
 }

@@ -17,7 +17,9 @@ import jwt from 'jsonwebtoken';
 export default async function signUpHandler(req, res) {
   if (req.method === 'POST') {
     if (!req.body.email || !req.body.password) {
-      return res.status(400).json({error: 'Missing Fields'});
+      return res.status(400).json({
+        error: 'Missing Fields',
+      });
     }
     const mongo = await dbConnect();
     let user = await mongo
@@ -27,7 +29,9 @@ export default async function signUpHandler(req, res) {
         email: req.body.email,
       });
     if (user) {
-      return res.status(403).json({error: 'User already exists!'});
+      return res.status(403).json({
+        error: 'User already exists!',
+      });
     }
     const hash = hashSync(req.body.password, 10);
     await mongo
